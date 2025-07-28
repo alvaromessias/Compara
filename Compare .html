@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PriceFinder - Comparador de Preços</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding-bottom: 20px;
+            overflow-x: hidden;
+        }
+        
+        /* Layout Mobile First */
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .mobile-nav a {
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 30px 15px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1rem;
+            margin: 0 auto 20px;
+            color: #555;
+            max-width: 500px;
+        }
+        
+        .search-container {
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-box {
+            display: flex;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            height: 50px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 0 20px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 0 15px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        /* Product Cards */
+        .product-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 20px 15px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            background: #eef2ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .product-image {
+            height: 150px;
+            background: linear-gradient(45deg, #f5f7fa, #e4edff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .price-comparison {
+            margin-top: 12px;
+        }
+        
+        .store-price {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+        
+        .best-price {
+            background: #e8f5e9;
+            color: var(--success);
+            font-weight: 600;
+            border-radius: 6px;
+            padding: 0 8px;
+        }
+        
+        .best-price .price {
+            color: var(--success);
+        }
+        
+        .price {
+            font-weight: 600;
+        }
+        
+        .price-alert {
+            display: flex;
+            margin-top: 15px;
+            gap: 8px;
+        }
+        
+        .price-alert input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .price-alert button {
+            background: var(--warning);
+            color: white;
+            border: none;
+            width: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Monitoring Section */
+        .monitoring-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            margin: 30px 15px;
+            text-align: center;
+        }
+        
+        .monitoring-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .monitoring-section p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.8rem;
+            padding: 0 15px;
+        }
+        
+        /* Swipe Animation */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .product-card {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+        
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        
+        /* Active States */
+        .search-box button:active {
+            background: var(--secondary);
+            transform: scale(0.98);
+        }
+        
+        .price-alert button:active {
+            background: #e68a00;
+            transform: scale(0.95);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-percentage"></i>
+                    <span>PriceFinder</span>
+                </div>
+                <div class="mobile-nav">
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="#"><i class="fas fa-bell"></i></a>
+                    <a href="#"><i class="fas fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Economize nas suas compras</h1>
+            <p>Compare preços e receba alertas quando os produtos ficarem mais baratos</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar produtos...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-search-dollar"></i>
+                <h3>Comparação Instantânea</h3>
+                <p>Veja preços em várias lojas de uma só vez</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-bell"></i>
+                <h3>Alertas de Preço</h3>
+                <p>Avise-me quando o produto ficar mais barato</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Histórico de Preços</h3>
+                <p>Veja quando é o melhor momento para comprar</p>
+            </div>
+        </section>
+
+        <section class="product-section">
+            <h2 class="section-title"><i class="fas fa-laptop"></i>Produtos em Destaque</h2>
+            
+            <div class="product-grid">
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Notebook Dell Inspiron</h3>
+                        
+                        <div class="price-comparison">
+                            <div class="store-price best-price">
+                                <span>Mercado Livre</span>
+                                <span class="price">R$ 4.050</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Amazon</span>
+                                <span class="price">R$ 4.200</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Kabum</span>
+                                <span class="price">R$ 4.300</span>
+                            </div>
+                        </div>
+                        
+                        <div class="price-alert">
+                            <input type="number" placeholder="Alerta em...">
+                            <button><i class="fas fa-bell"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Samsung Galaxy S23</h3>
+                        
+                        <div class="price-comparison">
+                            <div class="store-price best-price">
+                                <span>Magazine Luiza</span>
+                                <span class="price">R$ 3.700</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Casas Bahia</span>
+                                <span class="price">R$ 3.750</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Amazon</span>
+                                <span class="price">R$ 3.800</span>
+                            </div>
+                        </div>
+                        
+                        <div class="price-alert">
+                            <input type="number" placeholder="Alerta em...">
+                            <button><i class="fas fa-bell"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Fone JBL Bluetooth</h3>
+                        
+                        <div class="price-comparison">
+                            <div class="store-price best-price">
+                                <span>Mercado Livre</span>
+                                <span class="price">R$ 240</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Submarino</span>
+                                <span class="price">R$ 245</span>
+                            </div>
+                            <div class="store-price">
+                                <span>Amazon</span>
+                                <span class="price">R$ 250</span>
+                            </div>
+                        </div>
+                        
+                        <div class="price-alert">
+                            <input type="number" placeholder="Alerta em...">
+                            <button><i class="fas fa-bell"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="monitoring-section">
+            <h2>Monitoramento de Preços</h2>
+            <p>Cadastre produtos e receba alertas quando o preço baixar!</p>
+            <a href="#" class="btn">Criar Conta Gratuita</a>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>&copy; 2023 PriceFinder - Comparador de Preços</p>
+        <p>Economize em todas as suas compras</p>
+    </footer>
+
+    <script>
+        // Simulação de funcionalidade de busca
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if(searchTerm.trim() !== '') {
+                alert(`Buscando por: "${searchTerm}"\nEm uma aplicação real, esta busca retornaria resultados de produtos.`);
+            }
+        });
+        
+        // Simulação de criação de alerta
+        document.querySelectorAll('.price-alert button').forEach(button => {
+            button.addEventListener('click', function() {
+                const priceInput = this.previousElementSibling;
+                const price = priceInput.value;
+                const product = this.closest('.product-card').querySelector('.product-title').textContent;
+                
+                if(price) {
+                    alert(`Alerta criado para ${product}!\nVocê será notificado quando o preço atingir R$${price}.`);
+                    priceInput.value = '';
+                    
+                    // Efeito visual
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-bell"></i>';
+                    }, 1500);
+                } else {
+                    alert('Por favor, informe um preço desejado.');
+                }
+            });
+        });
+        
+        // Efeito ao rolar
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            const features = document.querySelector('.features');
+            
+            if(scrollPosition > 100) {
+                features.style.opacity = '1';
+                features.style.transform = 'translateY(0)';
+            }
+        });
+        
+        // Inicialização de animações
+        document.addEventListener('DOMContentLoaded', function() {
+            const features = document.querySelector('.features');
+            features.style.opacity = '0';
+            features.style.transform = 'translateY(20px)';
+            features.style.transition = 'opacity 0.5s, transform 0.5s';
+            
+            // Disparar animação após um pequeno delay
+            setTimeout(() => {
+                features.style.opacity = '1';
+                features.style.transform = 'translateY(0)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
